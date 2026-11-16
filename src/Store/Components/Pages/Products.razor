@@ -2,6 +2,7 @@
 @using DataEntities
 @using Store.Services
 @inject IConfiguration Configuration
+@inject ProductService ProductService
 @rendermode InteractiveServer
 @attribute [StreamRendering(true)]
 
@@ -11,15 +12,101 @@
 
 <p>Here are some of our amazing outdoor products that you can purchase.</p>
 
+<style>
+    .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 20px;
+        margin-top: 16px;
+    }
+
+    .product-card {
+        background: #fff;
+        border: 1px solid #e7e7e7;
+        border-radius: 10px;
+        padding: 12px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+    }
+
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .product-image {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+        border-radius: 8px;
+        background: #f3f3f3;
+    }
+
+    .product-row {
+        margin-top: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .product-name {
+        margin: 0;
+        font-size: 1rem;
+        line-height: 1.3;
+    }
+
+    .product-price {
+        margin: 0;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .product-description {
+        margin: 8px 0 0 0;
+        color: #444;
+        font-size: 0.92rem;
+        line-height: 1.4;
+    }
+
+    @@media (max-width: 600px) {
+        .products-grid {
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 14px;
+        }
+
+        .product-card {
+            padding: 10px;
+        }
+    }
+</style>
+
 @if (products == null)
 {
-    <p><em>Loading...</em></p>
+    <div class="d-flex align-items-center gap-2" role="status" aria-live="polite">
+        <div class="spinner-border spinner-border-sm text-primary" aria-hidden="true"></div>
+        <span>Loading products...</span>
+    </div>
+}
+else if (products.Count == 0)
+{
+    <p>No products available.</p>
 }
 else
 {
-    <!--Implement Products table here-->
-    <p>Under construction...</p>
-
+    <div class="products-grid">
+        @foreach (var product in products)
+        {
+            <article class="product-card">
+                <img class="product-image" src="@GetProductImageUrl(product)" alt="@product.Name" />
+                <div class="product-row">
+                    <h3 class="product-name">@product.Name</h3>
+                    <p class="product-price">@product.Price.ToString("C")</p>
+                </div>
+                <p class="product-description">@product.Description</p>
+            </article>
+        }
+    </div>
 }
 
 @code {
@@ -28,10 +115,18 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        // Simulate asynchronous loading to demonstrate streaming rendering
         await Task.Delay(500);
-        imagePrefix = Configuration["ImagePrefix"]!;
-        products = [];
+        imagePrefix = Configuration["ImagePrefix"] ?? string.Empty;
+        products = await ProductService.GetProducts();
     }
 
+    private string GetProductImageUrl(Product product)
+    {
+        if (string.IsNullOrWhiteSpace(product.ImageUrl))
+        {
+            return string.Empty;
+        }
+
+        return $"{imagePrefix}{product.ImageUrl}";
+    }
 }

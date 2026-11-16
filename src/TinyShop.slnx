@@ -1,0 +1,27 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="../.github/copilot-instructions.md" />
+    <File Path="../lab/part00-exploring-codebase.md" />
+    <File Path="../lab/part01-code-completion.md" />
+    <File Path="../lab/part02-enhancing-ui.md" />
+    <File Path="../lab/part03-referencing-files.md" />
+    <File Path="../lab/part04-custom-instructions.md" />
+    <File Path="../lab/part05-implementing-features.md" />
+    <File Path="../lab/part06-copilot-vision.md" />
+    <File Path="../lab/part07-debugging-with-copilot.md" />
+    <File Path="../lab/part08-commit-summary-descriptions.md" />
+    <File Path="../lab/part09-mcp.md" />
+    <File Path="../lab/part10-planning-mode.md" />
+    <File Path="../lab/part11-reusable-prompts.md" />
+    <File Path="../lab/part12-delegate-to-cloud.md" />
+    <File Path="../lab/setup.md" />
+    <File Path="../README.md" />
+    <File Path=".mcp.json" />
+  </Folder>
+  <Project Path="DataEntities/DataEntities.csproj" />
+  <Project Path="Products/Products.csproj" />
+  <Project Path="Store/Store.csproj" />
+  <Project Path="TinyShop.AppHost/TinyShop.AppHost.csproj" />
+  <Project Path="TinyShop.ServiceDefaults/TinyShop.ServiceDefaults.csproj" />
+  <Project Path="TinyShop.Tests/TinyShop.Tests.csproj" />
+</Solution>
